@@ -1,0 +1,55 @@
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("broom")
+install.packages("ggpubr")
+
+library(ggplot2)
+library(dplyr)
+library(broom)
+library(ggpubr)
+
+heart.data <- read.csv("/data/heart.data.csv")
+
+# numerical description
+summary(heart.data)
+
+## pairwise joint distributions
+pairs(heart.data)
+
+## correlation matrix
+cor(heart.data)
+ggcorrplot(cor(heart.data))
+
+## target normality
+hist(heart.data$heart.disease)
+
+## linreg model
+heart.disease.lm<-lm(heart.disease ~ biking + smoking, data = heart.data)
+
+summary(heart.disease.lm)
+
+## plots
+x <- heart.data$biking
+y <- heart.data$smoking
+z <- heart.data$heart.disease
+
+grid.lines = 40
+x.pred <- seq(min(x), max(x), length.out = grid.lines)
+y.pred <- seq(min(y), max(y), length.out = grid.lines)
+xy <- expand.grid( biking = x.pred, smoking = y.pred)
+z.pred <- matrix(predict(heart.disease.lm, newdata = xy), nrow = grid.lines, ncol = grid.lines)
+fitpoints <- predict(heart.disease.lm)
+
+scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red", 
+          theta = 20, phi = 10, bty="b",
+          xlab = "biking", ylab = "smoking", zlab = "heart.disease",  
+          surf = list(x = x.pred, y = y.pred, z = z.pred,  
+                      facets = TRUE, fit = fitpoints, col=ramp.col (col = c("dodgerblue3","seagreen2"), n = 300, alpha=0.9), border="black"), main = "Linear Regression")
+
+
+scatter3D(x, y, z, pch = 19, cex = 1,colvar = NULL, col="red", 
+          theta = 0, phi = -60, bty="b",
+          xlab = "biking", ylab = "smoking", zlab = "heart.disease",  
+          surf = list(x = x.pred, y = y.pred, z = z.pred,  
+                      facets = TRUE, fit = fitpoints, col=ramp.col (col = c("dodgerblue3","seagreen2"), n = 300, alpha=0.9), border="black"), main = "Linear Regression")
+
