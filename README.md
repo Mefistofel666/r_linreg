@@ -14,6 +14,10 @@ heart.data <- read.csv("/data/heart.data.csv")
 summary(heart.data)
 ```
 ![summary(heart.data)](/images/image_1.png)
+```r
+var(heart.data)
+```
+![summary(heart.data)](/images/image_10.png)
 
 ### График совместных распределений признаков
 Видим около линейную зависимость между ездой на велосипеде и болезнью сердца. 
